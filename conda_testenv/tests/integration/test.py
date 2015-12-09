@@ -29,7 +29,7 @@ class Test_cli(unittest.TestCase):
                                ],
                               env=self.environ)
 
-        self.test_prefix = os.path.join(self.tmpdir, 'test_prefix')        
+        self.test_prefix = os.path.join(self.tmpdir, 'test_prefix')
         cmd = [conda, 'create', '-p', self.test_prefix, 'a', 'b',
                'c', '--use-local', '--yes']
         subprocess.check_call(cmd, env=self.environ)
