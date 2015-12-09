@@ -10,8 +10,8 @@ class Test_cli(unittest.TestCase):
     def setUp(self):
         conda = os.path.join(os.path.dirname(sys.executable), 'conda')
         self.environ = os.environ.copy()
-
         self.tmpdir = tempfile.mkdtemp('conda_setup')
+
         condarc = os.path.join(self.tmpdir, 'condarc')
         self.environ['CONDARC'] = condarc
         with open(condarc, 'w') as fh:
