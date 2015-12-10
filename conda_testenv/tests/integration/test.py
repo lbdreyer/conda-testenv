@@ -14,6 +14,8 @@ class Test_cli(unittest.TestCase):
 
         condarc = os.path.join(self.tmpdir, 'condarc')
         self.environ['CONDARC'] = condarc
+        self.environ['CONDA_NPY'] = '110'
+
         with open(condarc, 'w') as fh:
             fh.write('add_pip_as_python_dependency: false\n')
             fh.write('conda-build:\n')
@@ -22,12 +24,12 @@ class Test_cli(unittest.TestCase):
 
         recipes_location = os.path.join(os.path.dirname(__file__),
                                         'test_recipes')
-        subprocess.check_call(['CONDA_NPY=110', conda, 'build',
+        subprocess.check_call([conda, 'build',
                                os.path.join(recipes_location, 'a'),
                                os.path.join(recipes_location, 'b'),
                                os.path.join(recipes_location, 'c'),
                                ],
-                              env=self.environ)
+                               env=self.environ)
 
         self.test_prefix = os.path.join(self.tmpdir, 'test_prefix')
         cmd = [conda, 'create', '-p', self.test_prefix, 'a', 'b',
