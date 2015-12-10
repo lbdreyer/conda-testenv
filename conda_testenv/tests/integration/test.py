@@ -22,7 +22,7 @@ class Test_cli(unittest.TestCase):
 
         recipes_location = os.path.join(os.path.dirname(__file__),
                                         'test_recipes')
-        subprocess.check_call([conda, 'build',
+        subprocess.check_call(['CONDA_NPY=110', conda, 'build',
                                os.path.join(recipes_location, 'a'),
                                os.path.join(recipes_location, 'b'),
                                os.path.join(recipes_location, 'c'),
