@@ -13,7 +13,7 @@ setup(
       packages=['conda_testenv', 'conda_testenv.tests',
                 'conda_testenv.tests.integration',
                 'conda_testenv.tests.integration.test_recipes'],
-      zip_safe=True,
+      zip_safe=False,
       entry_points={
           'console_scripts': [
               'conda-testenv = conda_testenv.cli:main',
