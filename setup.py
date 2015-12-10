@@ -12,6 +12,7 @@ setup(
       url='https://github.com/scitools/conda-testenv',
       packages=['conda_testenv', 'conda_testenv.tests',
                 'conda_testenv.tests.integration',
+                'conda_testenv.tests.integration.test_recipes',                
                 'conda_testenv.tests.integration.test_recipes.a',
                 'conda_testenv.tests.integration.test_recipes.b',
                 'conda_testenv.tests.integration.test_recipes.c'],
