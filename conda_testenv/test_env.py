@@ -72,8 +72,11 @@ def run_pkg_tests(m, env_prefix):
         return
     env = os.environ
     env = prepend_bin_path(env, env_prefix, prepend_prefix=True)
-    conda_build_test.run_tests(m, env, tmpdir, py_files, pl_files, shell_files)
-    shutil.rmtree(tmpdir)
+    try:
+        conda_build_test.run_tests(m, env, tmpdir,
+                                   py_files, pl_files, shell_files)
+    finally:
+        shutil.rmtree(tmpdir)
 
 
 def run_env_tests(env_prefix):
@@ -82,6 +85,8 @@ def run_env_tests(env_prefix):
     environment.
 
     """
+    # The conda_build.MetaData of recipes with a dependency of numpy x.x require
+    # this to be set but the value is not important
     config.CONDA_NPY = 00
     sources = list_package_sources(env_prefix)
     for source in sources:
