@@ -7,7 +7,7 @@ requirements:
         - python
     run:
         - python
-        - numpy x.x
+
 test:
     imports:
         - b_pkg

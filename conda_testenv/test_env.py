@@ -27,15 +27,17 @@ def list_package_sources(prefix):
     return sources
 
 
-def recipe_exists(source):
+def recipe_directory(source):
     """
     Find the recipe in a source if it exists.
 
     """
     meta_dir = os.path.join(source, 'info', 'recipe')
-    if not os.path.isdir(meta_dir):
-        return False
-    return meta_dir
+    if os.path.isdir(meta_dir):
+        return meta_dir
+    else:
+        msg = "Recipe for this package does not exist"
+        raise IOError(msg)
 
 
 @contextmanager
@@ -65,6 +67,10 @@ def run_pkg_tests(m, env_prefix):
     environment.
 
     """
+    # The conda_build.MetaData of recipes with a dependency of numpy x.x require
+    # this to be set but the value is not important
+    config.CONDA_NPY = 00
+
     tmpdir = tempfile.mkdtemp()
     test_files = conda_build_test.create_test_files(m, tmpdir)
     py_files, pl_files, shell_files = test_files
@@ -85,14 +91,13 @@ def run_env_tests(env_prefix):
     environment.
 
     """
-    # The conda_build.MetaData of recipes with a dependency of numpy x.x require
-    # this to be set but the value is not important
-    config.CONDA_NPY = 00
     sources = list_package_sources(env_prefix)
     for source in sources:
-        recipe_path = recipe_exists(source)
-        if recipe_path:
+        try:
+            recipe_path = recipe_directory(source)
             with switch_out_meta_for_orig(recipe_path):
                 m = conda_build.metadata.MetaData(recipe_path)
                 run_pkg_tests(m, env_prefix)
+        except IOError:
+            pass
     print('All tests are finished.')
