@@ -20,7 +20,6 @@ class Test_cli(unittest.TestCase):
             fh.write('conda-build:\n')
             fh.write('    root-dir: {}'.format(os.path.join(self.tmpdir,
                                                             'build-root')))
-
         recipes_location = os.path.join(os.path.dirname(__file__),
                                         'test_recipes')
         build_environ = self.environ.copy()
@@ -30,7 +29,7 @@ class Test_cli(unittest.TestCase):
                                os.path.join(recipes_location, 'b'),
                                os.path.join(recipes_location, 'c'),
                                ],
-                               env=build_environ)
+                              env=build_environ)
 
         self.test_prefix = os.path.join(self.tmpdir, 'test_prefix')
         cmd = [conda, 'create', '-p', self.test_prefix, 'a', 'b',

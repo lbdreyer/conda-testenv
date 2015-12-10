@@ -66,18 +66,14 @@ def run_pkg_tests(m, env_prefix):
     environment.
 
     """
-    # The conda_build.MetaData of recipes with a dependency of numpy x.x
-    # requires this to be set but the value is not important
-    config.CONDA_NPY = 00
-
     tmpdir = tempfile.mkdtemp()
-    test_files = conda_build_test.create_test_files(m, tmpdir)
-    py_files, pl_files, shell_files = test_files
-    if not (py_files or pl_files or shell_files):
-        return
-    env = os.environ
-    env = prepend_bin_path(env, env_prefix, prepend_prefix=True)
     try:
+        test_files = conda_build_test.create_test_files(m, tmpdir)
+        py_files, pl_files, shell_files = test_files
+        if not (py_files or pl_files or shell_files):
+            return
+        env = os.environ
+        env = prepend_bin_path(env, env_prefix, prepend_prefix=True)
         conda_build_test.run_tests(m, env, tmpdir,
                                    py_files, pl_files, shell_files)
     finally:
@@ -95,8 +91,16 @@ def run_env_tests(env_prefix):
         try:
             recipe_path = recipe_directory(source)
             with switch_out_meta_for_orig(recipe_path):
+                # The conda_build.MetaData of recipes with a dependency of
+                # numpy x.x requires this to be set but the value is not
+                # important
+                SET_NPY = config.CONDA_NPY is None
+                if SET_NPY:
+                    config.CONDA_NPY = 00
                 m = conda_build.metadata.MetaData(recipe_path)
                 run_pkg_tests(m, env_prefix)
+                if SET_NPY:
+                    config.CONDA_NPY = None
         except IOError:
             pass
     print('All tests are finished.')
